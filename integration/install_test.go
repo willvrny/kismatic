@@ -80,12 +80,13 @@ var _ = Describe("kismatic", func() {
 			})
 		})
 
-		Context("when deploying a cluster with all node roles", func() {
+		Context("when deploying a cluster with all node roles and docker already installed", func() {
 			installOpts := installOptions{
 				allowPackageInstallation: true,
 			}
-			ItOnAWS("should install successfully [slow]", func(aws infrastructureProvisioner) {
+			ItOnAWS("should install successfully", func(aws infrastructureProvisioner) {
 				WithInfrastructure(NodeCount{1, 1, 1, 1, 1}, Ubuntu1604LTS, aws, func(nodes provisionedNodes, sshKey string) {
+					InstallOfficialDocker(nodes, Ubuntu1604LTS, sshKey)
 					err := installKismatic(nodes, installOpts, sshKey)
 					Expect(err).ToNot(HaveOccurred())
 				})
