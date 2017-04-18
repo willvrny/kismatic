@@ -113,9 +113,12 @@ func WritePlanTemplate(p *Plan, w PlanReadWriter) error {
 
 	// Set Certificate defaults
 	p.Cluster.Certificates.Expiry = "17520h"
-	p.DockerRegistry.SetupInternal = false
+
+	// Docker
+	p.Docker.AllowInstallation = true
 
 	// Set DockerRegistry defaults
+	p.DockerRegistry.SetupInternal = false
 	p.DockerRegistry.Port = 8443
 
 	// Generate entries for all node types
@@ -210,6 +213,7 @@ var commentMap = map[string]string{
 	"internalip":               "If the node has an IP for internal traffic, enter it here; otherwise leave blank.",
 	"load_balanced_fqdn":       "If you have set up load balancing for master nodes, enter the FQDN name here. Otherwise, use the IP address of a single master node.",
 	"load_balanced_short_name": "If you have set up load balancing for master nodes, enter the short name here. Otherwise, use the IP address of a single master node.",
+	"allow_installation":       "Set to false if a supported version of Docker is already installed on the nodes.",
 	"docker_registry":          "Here you will provide the details of your Docker registry or setup an internal one to run in the cluster. This is optional and the cluster will always have access to the Docker Hub.",
 	"setup_internal":           "When true, a Docker Registry will be installed on top of your cluster and used to host Docker images needed for its installation.",
 	"address":                  "IP or hostname for your Docker registry. An internal registry will NOT be setup when this field is provided. Must be accessible from all the nodes in the cluster.",

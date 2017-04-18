@@ -30,6 +30,7 @@ func GetSSHKeyFile() (string, error) {
 
 type installOptions struct {
 	allowPackageInstallation    bool
+	allowDockerInstallation     bool
 	disconnectedInstallation    bool
 	autoConfigureDockerRegistry bool
 	dockerRegistryIP            string
@@ -69,6 +70,7 @@ func buildPlan(nodes provisionedNodes, installOpts installOptions, sshKey string
 	}
 	plan := PlanAWS{
 		AllowPackageInstallation: installOpts.allowPackageInstallation,
+		AllowDockerInstallation:  installOpts.allowDockerInstallation,
 		DisconnectedInstallation: installOpts.disconnectedInstallation,
 		Etcd:                nodes.etcd,
 		Master:              nodes.master,

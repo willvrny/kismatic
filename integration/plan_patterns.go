@@ -17,6 +17,7 @@ type PlanAWS struct {
 	SSHKeyFile                   string
 	HomeDirectory                string
 	AllowPackageInstallation     bool
+	AllowDockerInstallation      bool
 	DisconnectedInstallation     bool
 	AutoConfiguredDockerRegistry bool
 	DockerRegistryIP             string
@@ -48,6 +49,7 @@ const planAWSOverlay = `cluster:
     ssh_key: {{.SSHKeyFile}}
     ssh_port: 22{{if .UseDirectLVM}}
 docker:
+  allow_installation: {{if .AllowDockerInstallation}}{{.AllowDockerInstallation}}{{else}}true{{end}}
   storage:
     direct_lvm:
       enabled: true

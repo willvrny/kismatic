@@ -64,6 +64,7 @@ type ClusterCatalog struct {
 	DiagnosticsDirectory string `yaml:"diagnostics_dir"`
 	DiagnosticsDateTime  string `yaml:"diagnostics_date_time"`
 
+	AllowDockerInstallation                bool   `yaml:"allow_docker_installation"`
 	DockerDirectLVMEnabled                 bool   `yaml:"docker_direct_lvm_enabled"`
 	DockerDirectLVMBlockDevicePath         string `yaml:"docker_direct_lvm_block_device_path"`
 	DockerDirectLVMDeferredDeletionEnabled bool   `yaml:"docker_direct_lvm_deferred_deletion_enabled"`
