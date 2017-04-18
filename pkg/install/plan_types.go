@@ -2,6 +2,7 @@ package install
 
 import (
 	"fmt"
+	"net"
 
 	"github.com/apprenda/kismatic/pkg/ssh"
 )
@@ -79,9 +80,33 @@ type DockerRegistry struct {
 	CAPath        string `yaml:"CA"`
 }
 
+// Docker includes the configuration for the docker installation owned by KET.
+type Docker struct {
+	// Storage includes the storage-specific configuration for docker
+	Storage DockerStorage
+}
+
+// DockerStorage includes the storage-specific configuration for docker.
+type DockerStorage struct {
+	// DirectLVM is the configuration required for setting up device mapper in direct-lvm mode
+	DirectLVM DockerStorageDirectLVM `yaml:"direct_lvm"`
+}
+
+// DockerStorageDirectLVM includes the configuration required for setting up
+// device mapper in direct-lvm mode
+type DockerStorageDirectLVM struct {
+	// Determines whether direct-lvm mode is enabled
+	Enabled bool
+	// BlockDevice is the path to the block device that will be used. E.g. /dev/sdb
+	BlockDevice string `yaml:"block_device"`
+	// EnableDeferredDeletion determines whether deferred deletion should be enabled
+	EnableDeferredDeletion bool `yaml:"enable_deferred_deletion"`
+}
+
 // Plan is the installation plan that the user intends to execute
 type Plan struct {
 	Cluster        Cluster
+	Docker         Docker
 	DockerRegistry DockerRegistry `yaml:"docker_registry"`
 	Etcd           NodeGroup
 	Master         MasterNodeGroup
@@ -154,10 +179,19 @@ func (p *Plan) getNodeWithIP(ip string) (*Node, error) {
 func (p *Plan) GetSSHConnection(host string) (*SSHConnection, error) {
 	nodes := p.getAllNodes()
 
+	var isIP bool
+	if ip := net.ParseIP(host); ip != nil {
+		isIP = true
+	}
+
 	// try to find the node with the provided hostname
 	var foundNode *Node
 	for _, node := range nodes {
-		if node.Host == host {
+		nodeAddress := node.Host
+		if isIP {
+			nodeAddress = node.IP
+		}
+		if nodeAddress == host {
 			foundNode = &node
 			break
 		}
@@ -179,7 +213,11 @@ func (p *Plan) GetSSHConnection(host string) (*SSHConnection, error) {
 	}
 
 	if foundNode == nil {
-		return nil, fmt.Errorf("node %q not found in the plan", host)
+		notFoundErr := fmt.Errorf("node %q not found in the plan", host)
+		if isIP {
+			notFoundErr = fmt.Errorf("node with IP %q not found in the plan", host)
+		}
+		return nil, notFoundErr
 	}
 
 	return &SSHConnection{&p.Cluster.SSH, foundNode}, nil

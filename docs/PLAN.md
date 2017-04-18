@@ -204,7 +204,7 @@ Thus, your pod network must be sized so that:
 
 Our default CIDR block for a pod is **172.16.0.0/16**, which would allow for a maximum of roughly 65k pods in total or roughly 1000 nodes with 64 pods per node or fewer.
 
-Similarly, the service network needs to be large enough to handle all of the Services that might be created on the cluster. Our default is **172.17.0.0/16**, which would allow for 65k services and that ought to be enough for anybody.
+Similarly, the service network needs to be large enough to handle all of the Services that might be created on the cluster. Our default is **172.20.0.0/16**, which would allow for 65k services and that ought to be enough for anybody.
 
 Care should be taken that the IP addresses under management by Kubernetes do not collide with IP addresses on the local network, including omitting these ranges from control of  DHCP.
 
@@ -252,10 +252,16 @@ Network policies for the local network on which nodes reside will need to be set
 
 <table>
   <tr>
-    <td>Purpose for rule</td>
-    <td>Target node types</td>
-    <td>Source IP range</td>
-    <td>Allow Rules</td>
+    <td><b>Purpose for rule</b></td>
+    <td><b>Target node types</b></td>
+    <td><b>Source IP range</b></td>
+    <td><b>Allow Rules</b></td>
+  </tr>
+  <tr>
+    <td>To allow communication with the kismatic inspector</td>
+    <td>all</td>
+    <td>installer node</td>
+    <td>tcp:8888</td>
   </tr>
   <tr>
     <td>To allow acces to the API server</td>

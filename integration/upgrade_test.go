@@ -25,20 +25,6 @@ var _ = Describe("Upgrade", func() {
 			})
 		})
 
-		Describe("From KET version v1.3.0-beta.0", func() {
-			BeforeEach(func() {
-				dir := setupTestWorkingDirWithVersion("v1.3.0-beta.0")
-				os.Chdir(dir)
-			})
-			Context("Using a larger cluster layout with Ubuntu 16.04", func() {
-				ItOnAWS("should result in an upgraded cluster [slow] [upgrade]", func(aws infrastructureProvisioner) {
-					WithInfrastructureAndDNS(NodeCount{Etcd: 3, Master: 2, Worker: 2, Ingress: 0, Storage: 0}, Ubuntu1604LTS, aws, func(nodes provisionedNodes, sshKey string) {
-						installAndUpgrade(nodes, sshKey)
-					})
-				})
-			})
-		})
-
 		Describe("From KET version v1.2.2", func() {
 			BeforeEach(func() {
 				dir := setupTestWorkingDirWithVersion("v1.2.2")
@@ -195,45 +181,12 @@ var _ = Describe("Upgrade", func() {
 						})
 					})
 				})
-			})
-
-			Context("Using a larger cluster layout with Ubuntu 16.04", func() {
-				ItOnAWS("should result in an upgraded cluster [slow] [upgrade]", func(aws infrastructureProvisioner) {
-					WithInfrastructureAndDNS(NodeCount{Etcd: 3, Master: 2, Worker: 3, Ingress: 0, Storage: 0}, Ubuntu1604LTS, aws, func(nodes provisionedNodes, sshKey string) {
-						installAndUpgrade(nodes, sshKey)
-					})
-				})
-			})
-		})
-
-		Describe("From KET version v1.0.3", func() {
-			BeforeEach(func() {
-				dir := setupTestWorkingDirWithVersion("v1.0.3")
-				os.Chdir(dir)
-			})
-
-			Context("Using a minikube layout", func() {
-				Context("Using CentOS 7", func() {
-					ItOnAWS("should be upgraded [slow] [upgrade]", func(aws infrastructureProvisioner) {
-						WithMiniInfrastructure(CentOS7, aws, func(node NodeDeets, sshKey string) {
-							installAndUpgradeMinikube(node, sshKey)
-						})
-					})
-				})
 
 				Context("Using Ubuntu 16.04", func() {
 					ItOnAWS("should be upgraded [slow] [upgrade]", func(aws infrastructureProvisioner) {
 						WithMiniInfrastructure(Ubuntu1604LTS, aws, func(node NodeDeets, sshKey string) {
 							installAndUpgradeMinikube(node, sshKey)
 						})
-					})
-				})
-			})
-
-			Context("Using a larger cluster layout with RedHat 7", func() {
-				ItOnAWS("should result in an upgraded cluster [slow] [upgrade]", func(aws infrastructureProvisioner) {
-					WithInfrastructureAndDNS(NodeCount{Etcd: 3, Master: 2, Worker: 3, Ingress: 0, Storage: 0}, RedHat7, aws, func(nodes provisionedNodes, sshKey string) {
-						installAndUpgrade(nodes, sshKey)
 					})
 				})
 			})
@@ -251,7 +204,9 @@ func installAndUpgradeMinikube(node NodeDeets, sshKey string) {
 
 func installAndUpgrade(nodes provisionedNodes, sshKey string) {
 	// Standup cluster with previous version
-	opts := installOptions{allowPackageInstallation: true}
+	// Using CIDR to pass tests on KET v1.3.x
+	// These versions used a version of kuberang with a bad test
+	opts := installOptions{allowPackageInstallation: true, serviceCIDR: "172.17.0.0/16"}
 	err := installKismatic(nodes, opts, sshKey)
 	FailIfError(err)
 

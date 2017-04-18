@@ -23,6 +23,8 @@ type PlanAWS struct {
 	DockerRegistryPort           int
 	DockerRegistryCAPath         string
 	ModifyHostsFiles             bool
+	UseDirectLVM                 bool
+	ServiceCIDR                  string
 }
 
 const planAWSOverlay = `cluster:
@@ -33,7 +35,7 @@ const planAWSOverlay = `cluster:
   networking:
     type: overlay
     pod_cidr_block: 172.16.0.0/16
-    service_cidr_block: 172.17.0.0/16
+    service_cidr_block: {{if .ServiceCIDR}}{{.ServiceCIDR}}{{else}}172.20.0.0/16{{end}}
     policy_enabled: false
     update_hosts_files: {{.ModifyHostsFiles}}
   certificates:
@@ -44,7 +46,13 @@ const planAWSOverlay = `cluster:
   ssh:
     user: {{.SSHUser}}
     ssh_key: {{.SSHKeyFile}}
-    ssh_port: 22
+    ssh_port: 22{{if .UseDirectLVM}}
+docker:
+  storage:
+    direct_lvm:
+      enabled: true
+      block_device: "/dev/xvdb"
+      enable_deferred_deletion: false{{end}}
 docker_registry:
   setup_internal: {{.AutoConfiguredDockerRegistry}}
   address: {{.DockerRegistryIP}}

@@ -12,7 +12,7 @@ var validPlan = Plan{
 		Networking: NetworkConfig{
 			Type:             "overlay",
 			PodCIDRBlock:     "172.16.0.0/16",
-			ServiceCIDRBlock: "172.17.0.0/16",
+			ServiceCIDRBlock: "172.20.0.0/16",
 		},
 		Certificates: CertsConfig{
 			Expiry: "17250h",
@@ -697,5 +697,45 @@ func TestDisconnectedInstallationPrereq(t *testing.T) {
 	if !valid {
 		t.Errorf("expected valid, but got invalid")
 		fmt.Println(errs)
+	}
+}
+
+func TestValidateDockerStorageDirectLVM(t *testing.T) {
+	tests := []struct {
+		config DockerStorageDirectLVM
+		valid  bool
+	}{
+		{
+			config: DockerStorageDirectLVM{
+				Enabled: false,
+			},
+			valid: true,
+		},
+		{
+			config: DockerStorageDirectLVM{
+				Enabled: true,
+			},
+			valid: false,
+		},
+		{
+			config: DockerStorageDirectLVM{
+				Enabled:     true,
+				BlockDevice: "foo",
+			},
+			valid: false,
+		},
+		{
+			config: DockerStorageDirectLVM{
+				Enabled:     true,
+				BlockDevice: "/dev/sdb",
+			},
+			valid: true,
+		},
+	}
+	for i, test := range tests {
+		ok, _ := test.config.validate()
+		if ok != test.valid {
+			t.Errorf("test %d: expect valid, but got invalid", i)
+		}
 	}
 }
