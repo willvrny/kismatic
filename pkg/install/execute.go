@@ -668,6 +668,7 @@ func (ae *ansibleExecutor) buildClusterCatalog(p *Plan) (*ansible.ClusterCatalog
 		EnableModifyHosts:         p.Cluster.Networking.UpdateHostsFiles,
 		EnableCalicoPolicy:        p.Cluster.Networking.PolicyEnabled,
 		EnablePackageInstallation: p.Cluster.AllowPackageInstallation,
+		PackageRepoURLs:           p.Cluster.PackageRepoURLs,
 		AllowDockerInstallation:   p.Docker.AllowInstallation,
 		KuberangPath:              filepath.Join("kuberang", "linux", "amd64", "kuberang"),
 		DisconnectedInstallation:  p.Cluster.DisconnectedInstallation,

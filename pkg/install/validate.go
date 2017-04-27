@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -148,6 +149,14 @@ func (c *Cluster) validate() (bool, []error) {
 	if c.AdminPassword == "" {
 		v.addError(errors.New("Admin password cannot be empty"))
 	}
+	if c.PackageRepoURLs != "" {
+		urls := strings.Split(c.PackageRepoURLs, ",")
+		for _, u := range urls {
+			if _, err := url.ParseRequestURI(u); err != nil {
+				v.addError(fmt.Errorf("Package repository %s must be a valid URL", u))
+			}
+		}
+	}
 	v.validate(&c.Networking)
 	v.validate(&c.Certificates)
 	v.validate(&c.SSH)
@@ -213,7 +222,7 @@ func (s sshConnectionSet) validate() (bool, []error) {
 
 	err := ssh.ValidUnencryptedPrivateKey(s.SSHConfig.Key)
 	if err != nil {
-		v.addError(fmt.Errorf("error parsing SSH key: %v", err))
+		v.addError(fmt.Errorf("SSH key validation error: %v", err))
 	} else {
 		var wg sync.WaitGroup
 		errQueue := make(chan error, len(s.Nodes))

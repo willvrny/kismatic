@@ -13,10 +13,8 @@
   - include: _etcd-networking.yaml
   # docker
   - include: _docker.yaml
-  - include: _docker-registry-container.yaml
-    when: setup_internal_docker_registry|bool == true
-  - include: _docker-registry-images.yaml
-    when: use_private_docker_registry|bool == true and disconnected_installation|bool == true # only load images if offline
+  - include: _docker-registry.yaml
+    when: use_private_docker_registry|bool == true  # configure private registry when either internal of an external is provided
   # kubernetes
   - include: _kubelet.yaml
   - include: _kube-apiserver.yaml
@@ -29,6 +27,8 @@
   - include: _kube-proxy.yaml
   - include: _calico.yaml
   - include: _calico-validate.yaml
+  - include: _addon-network-policy.yaml
+    when: enable_calico_policy|bool == true
   - include: _kube-dns.yaml
   - include: _kube-ingress.yaml
     when: configure_ingress|bool == true
@@ -38,6 +38,3 @@
   - include: _nfs-volumes.yaml
     when: nfs_volumes|length > 0
   - include: _update-version.yaml
-  # add-ons
-  - include: _addon-network-policy.yaml
-    when: enable_calico_policy|bool == true

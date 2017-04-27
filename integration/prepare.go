@@ -20,9 +20,9 @@ const (
 	installEtcdYum            = `sudo yum -y install etcd-3.1.4-1`
 	installTransitionEtcdYum  = `sudo yum -y install transition-etcd`
 	installDockerYum          = `sudo yum -y install docker-engine-1.11.2-1.el7.centos`
-	installKubeletYum         = `sudo yum -y install kubelet-1.6.0_1-1`
-	installKubectlYum         = `sudo yum -y install kubectl-1.6.0_1-1`
-	installKismaticOfflineYum = `sudo yum -y install kismatic-offline-1.6.0_1-1`
+	installKubeletYum         = `sudo yum -y install kubelet-1.6.2_1-1`
+	installKubectlYum         = `sudo yum -y install kubectl-1.6.2_1-1`
+	installKismaticOfflineYum = `sudo yum -y install kismatic-offline-1.6.2_1-1`
 	// install docker from official repo
 	downloadDockerSELinuxOfficialYum = `sudo curl https://yum.dockerproject.org/repo/main/centos/7/Packages/docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm -o /tmp/docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm`
 	downloadDockerOfficialYum        = `sudo curl https://yum.dockerproject.org/repo/main/centos/7/Packages/docker-engine-1.12.6-1.el7.centos.x86_64.rpm -o /tmp/docker-engine-1.12.6-1.el7.centos.x86_64.rpm`
@@ -37,9 +37,9 @@ const (
 	installEtcdApt            = `sudo apt-get -y install etcd=3.1.4`
 	installTransitionEtcdApt  = `sudo apt-get -y install transition-etcd`
 	installDockerApt          = `sudo apt-get -y install docker-engine=1.11.2-0~xenial`
-	installKubeletApt         = `sudo apt-get -y install kubelet=1.6.0-1`
-	installKubectlApt         = `sudo apt-get -y install kubectl=1.6.0-1`
-	installKismaticOfflineApt = `sudo apt-get -y install kismatic-offline=1.6.0-1`
+	installKubeletApt         = `sudo apt-get -y install kubelet=1.6.2-1`
+	installKubectlApt         = `sudo apt-get -y install kubectl=1.6.2-1`
+	installKismaticOfflineApt = `sudo apt-get -y install kismatic-offline=1.6.2-1`
 	// install docker from official repo
 	downloadDockerOfficialApt = `sudo wget -O /tmp/docker-engine_1.12.6-0~ubuntu-xenial_amd64.deb https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_1.12.6-0~ubuntu-xenial_amd64.deb`
 	installDockerDepsApt      = `sudo apt-get -y install libltdl7`
