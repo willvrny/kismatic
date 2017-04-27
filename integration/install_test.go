@@ -82,8 +82,8 @@ var _ = Describe("kismatic", func() {
 
 		Context("when deploying a cluster with all node roles and docker already installed", func() {
 			installOpts := installOptions{
-				allowPackageInstallation: true,
-				allowDockerInstallation:  false,
+				allowPackageInstallation:       true,
+				disableAutoConfigurationDocker: true,
 			}
 			ItOnAWS("should install successfully", func(aws infrastructureProvisioner) {
 				WithInfrastructure(NodeCount{1, 1, 1, 1, 1}, Ubuntu1604LTS, aws, func(nodes provisionedNodes, sshKey string) {

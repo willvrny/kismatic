@@ -10,6 +10,6 @@
 
     roles:
       - role: packages-docker
-        when: allow_package_installation|bool == true and allow_docker_installation|bool == true
+        when: allow_package_installation|bool == true
       - role: docker-storage
       - role: docker
