@@ -31,6 +31,10 @@ func serviceTypes() []string {
 	return []string{"ClusterIP", "NodePort", "LoadBalancer", "ExternalName"}
 }
 
+func cloudProviders() []string {
+	return []string{"aws", "azure", "cloudstack", "fake", "gce", "mesos", "openstack", "ovirt", "photon", "rackspace", "vsphere"}
+}
+
 // NetworkConfig describes the cluster's networking configuration
 type NetworkConfig struct {
 	Type             string `yaml:"type,omitempty"`
@@ -55,6 +59,12 @@ type SSHConfig struct {
 	Port int    `yaml:"ssh_port"`
 }
 
+// CloudProvider sets the Kubernetes cloud_provider options
+type CloudProvider struct {
+	Provider string
+	Config   string
+}
+
 // Cluster describes a Kubernetes cluster
 type Cluster struct {
 	Name                       string
@@ -68,6 +78,7 @@ type Cluster struct {
 	Certificates               CertsConfig
 	SSH                        SSHConfig
 	APIServerOptions           APIServerOptions `yaml:"kube_apiserver"`
+	CloudProvider              CloudProvider    `yaml:"cloud_provider"`
 }
 
 // A Node is a compute unit, virtual or physical, that is part of the cluster

@@ -21,6 +21,9 @@ cluster:
     ssh_port: 22
   kube_apiserver:
     option_overrides: {}
+  cloud_provider:
+    provider: ""                         # Options: 'aws','azure','cloudstack','fake','gce','mesos','openstack','ovirt','photon','rackspace','vsphere'. Leave empty for bare metal setups or other unsupported providers.
+    config: ""                           # Path to the config file, leave empty if provider does not require it.
 docker:
   storage:
     direct_lvm:                          # Configure devicemapper in direct-lvm mode (RHEL/CentOS only).

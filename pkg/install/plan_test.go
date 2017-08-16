@@ -68,7 +68,6 @@ func TestWritePlanTemplate(t *testing.T) {
 			cmd.Run()
 		}
 	}
-
 }
 
 func TestGenerateAlphaNumericPassword(t *testing.T) {
