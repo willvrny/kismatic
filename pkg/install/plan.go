@@ -341,7 +341,7 @@ var commentMap = map[string]string{
 	"cluster.networking.update_hosts_files":              "When true, the installer will add entries for all nodes to other nodes' hosts files. Use when you don't have access to DNS.",
 	"cluster.networking.http_proxy":                      "Set the proxy server to use for HTTP connections.",
 	"cluster.networking.https_proxy":                     "Set the proxy server to use for HTTPs connections",
-	"cluster.networking.no_proxy":                        "List of host names and/or IPs that shouldn't go through any proxy. If set to a asterisk '*' only, it matches all hosts.",
+	"cluster.networking.no_proxy":                        "List of host names and/or IPs that shouldn't go through any proxy. If set to a asterisk '*' only, it matches all hosts. All nodes' 'host' and 'IPs' are always set.",
 	"cluster.certificates.expiry":                        "Self-signed certificate expiration period in hours; default is 2 years.",
 	"cluster.certificates.ca_expiry":                     "CA certificate expiration period in hours; default is 2 years.",
 	"cluster.ssh.ssh_key":                                "Absolute path to the ssh private key we should use to manage nodes.",
